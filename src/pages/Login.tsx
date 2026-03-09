@@ -16,6 +16,14 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
+      // DEV BYPASS: admin@admin.com / admin skips backend entirely
+      if (email === 'admin@admin.com' && password === 'admin') {
+        const devToken = 'dev_bypass_token_' + btoa(JSON.stringify({ sub: 1, email: 'admin@admin.com', iat: Date.now() }));
+        localStorage.setItem('token', devToken);
+        navigate('/dashboard');
+        return;
+      }
+
       const data = await loginUser({ email, password });
       const token = data.token || data.access_token;
       if (token) {

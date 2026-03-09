@@ -17,6 +17,7 @@ from services.text_extraction import extract_text, get_page_count
 from services.feature_engineering import extract_features
 from services.scoring_engine import predict_score, compute_detailed_scores
 from services.explanation_engine import generate_explanation
+from evaluation_engine import compute_proposal_index
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +83,19 @@ def run_evaluation(file_path: str) -> Dict[str, Any]:
     # Step 4 — Detailed score breakdown
     detailed = compute_detailed_scores(features, raw_score)
     scores = detailed["scores"]
-    overall_score = detailed["overall_score"]
+    
+    # Compute PEI (Proposal Evaluation Index) over the detailed scores
+    pei_input = {
+        "novelty_score": scores.get("novelty", 0) / 100.0,
+        "methodology_score": scores.get("methodology", 0) / 100.0,
+        "feasibility_score": scores.get("feasibility", 0) / 100.0,
+        "completeness_score": scores.get("completeness", 0) / 100.0,
+        "risk_density_score": 0.0,
+        "highest_similarity": 1.0 - features[4]
+    }
+    
+    pei_result = compute_proposal_index(pei_input)
+    overall_score = pei_result["final_score"]
 
     # Step 5 — Explanation
     feature_info = {
