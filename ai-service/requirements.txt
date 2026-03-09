@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pymupdf
+pdfplumber
+python-dotenv
+requests
+psycopg2-binary
+pgvector
+google-generativeai
+python-multipart
+sentence-transformers
+scikit-learn
+pandas
+numpy

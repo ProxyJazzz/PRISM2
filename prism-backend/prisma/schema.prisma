@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  institutionName String
+  adminName       String
+  email           String     @unique
+  passwordHash    String
+  createdAt       DateTime   @default(now())
+  proposals       Proposal[]
+}
+
+model Proposal {
+  id           Int               @id @default(autoincrement())
+  userId       Int
+  fileName     String
+  aiProposalId Int?
+  uploadDate   DateTime          @default(now())
+  status       String
+  user         User              @relation(fields: [userId], references: [id])
+  analysis     ProposalAnalysis?
+}
+
+model ProposalAnalysis {
+  id                Int      @id @default(autoincrement())
+  proposalId        Int      @unique
+  finalScore        Float?
+  category          String?
+  evaluationSummary String?
+  analysisJson      Json
+  createdAt         DateTime @default(now())
+  proposal          Proposal @relation(fields: [proposalId], references: [id])
+}
