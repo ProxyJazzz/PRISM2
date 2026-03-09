@@ -88,6 +88,15 @@ export class ProposalsController {
         return await this.proposalsService.chatWithProposal(id, req.user.userId, message);
     }
 
+    @Get(':id/report')
+    @UseGuards(JwtAuthGuard)
+    async downloadReport(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() req: AuthenticatedRequest
+    ): Promise<string> {
+        return await this.proposalsService.getProposalReport(id, req.user.userId);
+    }
+
     @Get(':id/explanation/:metric')
     @UseGuards(JwtAuthGuard)
     async getMetricExplanation(

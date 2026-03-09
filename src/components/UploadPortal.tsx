@@ -25,7 +25,7 @@ export default function UploadPortal({ onUploadSuccess }: UploadPortalProps) {
       try {
         const data = await uploadProposal(file);
         setSuccess(true);
-        setTimeout(() => onUploadSuccess(data.id), 1500);
+        setTimeout(() => onUploadSuccess(data.proposalId), 1500);
       } catch (err: any) {
         setError(err.message || 'Upload failed. Please try again.');
       } finally {

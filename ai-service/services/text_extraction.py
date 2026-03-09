@@ -77,6 +77,8 @@ def clean_text(text: str) -> str:
     """Normalize and clean extracted text."""
     if not text:
         return ""
+    # Remove null bytes — PostgreSQL JSON rejects \x00
+    text = text.replace('\x00', '')
     text = re.sub(r'[\u200b\u200c\u200d\u200e\u200f\uFEFF]', '', text)
     text = re.sub(r'[\u2028\u2029]', '\n', text)
     text = re.sub(r'-\n', '', text)

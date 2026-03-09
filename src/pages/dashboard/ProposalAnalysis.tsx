@@ -44,7 +44,7 @@ export default function ProposalAnalysis() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `PRISM-Report-${id}.pdf`;
+      a.download = `PRISM-Report-${id}.txt`;
       a.click();
       URL.revokeObjectURL(url);
     } catch {
